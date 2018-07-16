@@ -10,7 +10,11 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
-from .parser import VCDParser
-from .watcher import VCDWatcher
-from .tracker import VCDTracker
-from .utils import v2d
+
+def v2d(value):
+    format, data = value
+    if format == "b":
+        return eval("0b" + data)
+    if format == "h":
+        return eval("0x" + data)
+    return eval(data)
