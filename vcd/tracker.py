@@ -15,22 +15,24 @@ class VCDTracker:
     """Abstract tracker class. Subclass this to implement a tracker.
     Examples are provided."""
 
-    def __init__(self, parser, watcher):
-        self.parser = parser
+    def __init__(self, watcher=None):
         self.watcher = watcher
+        self.parser = None
         self.finished = False
         self.trigger_count = 0
-        self.start()
+        self.activity = None
+        self.values = None
 
-    def __getattribute__(self, name):
-        if name in ["parser", "watcher", "finished"]:
-            return object.__getattribute__(self, name)
-
+    def __getitem__(self, name):
         id = self.watcher.get_id(name)
         if id:
             return self.values[id]
         else:
-            return object.__getattribute__(self, name)
+            raise KeyError
+
+    def __hasitem__(self, name):
+        id = self.watcher.get_id(name)
+        return id
 
     def start(self):
         raise NotImplemented

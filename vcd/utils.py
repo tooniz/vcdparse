@@ -12,9 +12,9 @@
 
 
 def v2d(value):
-    format, data = value
-    if format == "b":
+    fmt, data = value
+    if fmt == "b":
         return eval("0b" + data)
-    if format == "h":
+    if fmt == "h":
         return eval("0x" + data)
     return eval(data)

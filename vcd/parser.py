@@ -98,12 +98,10 @@ class VCDParser:
 
     def register_watcher(self, watcher):
         """Add a watcher to the list, for evaluation at each time change"""
-        watcher.add_parser(self)
         self.watchers.append(watcher)
 
     def deregister_watcher(self, watcher):
         """Remove a watcher from the list"""
-        # do not remove watcher's parser, might want to re-add itself later
         self.watchers.remove(watcher)
 
     # Parsing helpers
@@ -151,6 +149,9 @@ class VCDParser:
             watcher.update_ids()
             for id in watcher.get_watching_ids():
                 self.watched_changes[id] = "x"
+        self.logger.debug("Finished parsing definitions! I know these vars:")
+        for code, mytype in self.idcode2references.items():
+            self.logger.debug("{}: {}".format(code, mytype))
 
     # Simulation keywords are presently ignored...
     def vcd_dumpall(self, tokeniser, keyword):
@@ -208,7 +209,7 @@ class VCDParser:
         self.changes = {}
         self.then = current_time
         self.now = next_time
-        logger.debug("Time is now %s (was %s)", self.now, self.then)
+        self.logger.debug("Time is now %s (was %s)", self.now, self.then)
 
     def update_watched_changes(self):
         """Watched changes is a persistent store of changes to the list of signals
