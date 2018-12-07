@@ -58,29 +58,38 @@ class VCDParser:
         self.watchers = []
         self.debug = False
         self.watched_changes = {}
+        self.xmr2id_cache = {}
 
     # Convenience getters/setters
     def get_id(self, xmr):
         """Given a Cross Module Reference (XMR), find the associated VCD ID string"""
         search_path = xmr.split(".")
+        self.logger.info("Searching `%s`", xmr)
+
+        if xmr in self.xmr2id_cache:
+            return self.xmr2id_cache[xmr]
 
         for id in self.idcode2references:
-            (var_type, size, reference) = self.idcode2references[id][0]
-            match = True
-            for depth, node in enumerate(search_path):
-                var_type, name = reference[depth]
-                if node == name:
-                    continue
-                else:
-                    match = False
-                    break
-            if match:
-                return id
+            for ref in range(len(self.idcode2references[id])):
+                (var_type, size, reference) = self.idcode2references[id][ref]
+                match = True
+                for depth, node in enumerate(search_path):
+                    var_type, name = reference[depth]
+                    if node == name:
+                        continue
+                    else:
+                        match = False
+                        break
+                if match:
+                    self.xmr2id_cache[xmr] = id
+                    return id
 
         raise ValueError("No match for ", xmr)
 
     def get_xmr(self, id):
         """Given an ID, generate the hierarchical reference"""
+        # Avoid doing this as id2xmr is not unique, only first result is returned
+        # relying on the first xmr may lead to unintended results
         if id in self.xmr_cache:
             return self.xmr_cache[id]
 
@@ -145,11 +154,13 @@ class VCDParser:
         self.end_of_definitions = True
         self.drop_declaration(tokeniser, keyword)
 
+        self.logger.info("Finished parsing definitions...")
+
         for watcher in self.watchers:
             watcher.update_ids()
             for id in watcher.get_watching_ids():
                 self.watched_changes[id] = "x"
-        self.logger.debug("Finished parsing definitions! I know these vars:")
+        self.logger.debug("idcode2references vars:")
         for code, mytype in self.idcode2references.items():
             self.logger.debug("{}: {}".format(code, mytype))
 

@@ -12,9 +12,13 @@
 
 
 def v2d(value):
-    fmt, data = value
-    if fmt == "b":
-        return eval("0b" + data)
-    if fmt == "h":
-        return eval("0x" + data)
-    return eval(data)
+    # Allow dealing with either tuple or single val
+    if isinstance(value, tuple):
+        fmt, data = value
+        if fmt == "b":
+            return eval("0b" + data)
+        if fmt == "h":
+            return eval("0x" + data)
+        return eval(data)
+    else:
+        return eval(value)

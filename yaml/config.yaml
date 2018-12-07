@@ -1,0 +1,29 @@
+---
+# VCD parser config file
+# 
+# Notes: 
+# 1) clock and reset are optional
+# 2) only supports ANDing protocol signals for now
+#
+# Example:
+# - name: Data Packet
+#   hier: TOP.receiver
+#   clock: i_clk
+#   reset: i_reset_n
+#   protocol:
+#     - data_valid
+#     - data_ready
+#   payload:
+#     - data_rddata
+#     - data_rdtag
+
+- name: Data Packet
+  hier: TOP.receiver
+  clock: i_clk
+  reset: i_reset_n
+  protocol:
+    - data_valid
+    - data_ready
+  payload:
+    - data_rddata
+    - data_rdtag
