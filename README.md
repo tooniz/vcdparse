@@ -28,7 +28,7 @@ The `vcd` module contains three useful classes:
     a tracker, `VCDTracker` **must** be subclassed, and the `start` and
     `update` methods **must** be implemented.
 
-The vcdparse.py script:
+The `vcdparse.py` script:
 
 * Providing an interface without installation of `vcd` modules
 * YAML config files can be provided to instance parsing of multiple HDL nodes, where each node has it own clock, reset, and protocol
