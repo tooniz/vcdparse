@@ -35,7 +35,7 @@ class VCDTracker:
         return id
 
     def start(self):
-        raise NotImplemented
+        raise NotImplementedError
 
     def notify(self, activity, values):
         self.trigger_count += 1
@@ -44,4 +44,4 @@ class VCDTracker:
         self.update()
 
     def update(self):
-        raise NotImplemented
+        raise NotImplementedError

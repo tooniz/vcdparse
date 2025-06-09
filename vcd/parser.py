@@ -183,14 +183,14 @@ class VCDParser:
 
     def vcd_end(self, tokeniser, keyword):
         if not self.end_of_definitions:
-            parse_error(tokeniser, keyword)
+            self.parse_error(tokeniser, keyword)
 
     # Actual parse routines
     def update_time(self, next_time):
         """Reached an update point in time in the VCD - use the collected changes
      and update any watchers that are sensitive to a signal that has changed"""
         current_time = self.now
-        if self.logger.getEffectiveLevel == logging.DEBUG:
+        if self.logger.getEffectiveLevel() == logging.DEBUG:
             self.logger.debug(
                 "End of time %s, processing sensitivity lists. Changes:", current_time
             )
