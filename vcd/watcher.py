@@ -126,4 +126,4 @@ class VCDWatcher:
     # (for instance, only on rising clock edges)
     def should_notify(self):
         # Called every time something in the sensitivity list changes
-        return true
+        return True
